@@ -19,8 +19,8 @@ def copia_apo_oficial():
     """caminho do repositorio a ser atualizado"""
     destino_apo = fr'D:\TOTVS\PROTHEUS\{combo_lista_apo.get()}\TTTP120.RPO' # apo selecionada
     destino_schedule = fr'D:\TOTVS\PROTHEUS\Apos\Schedule\TTTP120.RPO'  #Schedule
-    copia_apo = shutil.copy(source,destino_apo)
-    copia_schedule = shutil.copy(source,destino_schedule)
+    copia_apo = shutil.copy2(source,destino_apo)
+    copia_schedule = shutil.copy2(source,destino_schedule)
     
     if copia_apo and copia_schedule:
         atualizar_ini()
@@ -28,8 +28,7 @@ def copia_apo_oficial():
 
 # Atualizar os arquivos INI.
 def atualizar_ini():
-    cfg = configparser.ConfigParser()
-    cfg.optionxform = str # função para escrever as letras maiscula ( o padrao sobreescreve o arquivo inteiro em minusculo )
+    
     pasta = [ r'D:\TOTVS\PROTHEUS\bin\Monitor\appserver.ini',
                 r'D:\TOTVS\PROTHEUS\bin\Slave01\appserver.ini',
                 r'D:\TOTVS\PROTHEUS\bin\Slave02\appserver.ini',
@@ -46,7 +45,8 @@ def atualizar_ini():
                 ]
     
     for appserver in pasta: #passa pela lista contendo o caminho da pasta que conten o arquivo appserve.ini
-        
+        cfg = configparser.ConfigParser()
+        cfg.optionxform = str # função para escrever as letras maiscula ( o padrao sobreescreve o arquivo inteiro em minusculo )
         cfg.read(appserver) # abrir arquivo ler
         cam_rpo = cfg.get('QUEIROZ','SourcePath') #pegar o caminho do apo no INI 
         apo = combo_lista_apo.get() #pegar o Apo que foi selecionada para subistituir no arquivo
